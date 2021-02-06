@@ -1,0 +1,52 @@
+<html>
+
+<head>
+    <title>ShoppingApp</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0/css/materialize.min.css">
+
+</head>
+
+<body>
+    <nav>
+        <div class="nav-wraper">
+            <a class="brand-logo center">Shopping List</a>
+        </div>
+    </nav>
+
+    <ul></ul>
+    <script>
+        const electron = require('electron');
+        const { ipcRenderer } = electron;
+        const ul = document.querySelector('ul');
+
+        // Add item to ul
+        ipcRenderer.on('item:add', (e, item) => {
+            ul.className='collection';
+            const li = document.createElement('li');
+            li.className='collection-item';
+            const itemText = document.createTextNode(item);
+            li.appendChild(itemText);
+            ul.appendChild(li);
+        });
+
+        // Clear items from ul
+        ipcRenderer.on('item:clear', () => {
+            ul.innerHTML = '';
+            ul.className='';
+        });
+
+        // Remove item on double click
+        ul.addEventListener('dblclick', removeItem);
+
+        // Remove item function
+        function removeItem(e) {
+            e.target.remove();
+            if(ul.clildren.length==0){
+                ul.className='';
+            }
+        }
+
+    </script>
+</body>
+
+</html>
